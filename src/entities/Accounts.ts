@@ -6,9 +6,12 @@ export class Accounts {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "float", default: 100 })
   balance: number;
 
-  @OneToMany(() => Transactions, (transactions) => transactions.accounts)
-  transactions: Transactions[];
+  @OneToMany(() => Transactions, (transaction) => transaction.creditedAccountId)
+  creditTransactions: Transactions[];
+
+  @OneToMany(() => Transactions, (transaction) => transaction.debitedAccountId)
+  debitTransactions: Transactions[];
 }

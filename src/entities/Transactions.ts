@@ -13,15 +13,16 @@ export class Transactions {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Accounts, (accounts) => accounts.transactions)
-  @JoinColumn([
-    { name: "debitedAccountId", referencedColumnName: "id" },
-    { name: "creditedAccountId", referencedColumnName: "id" },
-  ])
-  accounts: Accounts;
+  @ManyToOne(() => Accounts, (account) => account.debitTransactions)
+  @JoinColumn({ name: "debitedAccountId" })
+  debitedAccountId: Accounts;
+
+  @ManyToOne(() => Accounts, (account) => account.creditTransactions)
+  @JoinColumn({ name: "creditedAccountId" })
+  creditedAccountId: Accounts;
 
   @Column()
-  value: string;
+  value: number;
 
   @CreateDateColumn()
   created_at: Date;
