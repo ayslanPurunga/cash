@@ -21,7 +21,7 @@ export class Transactions {
   @JoinColumn({ name: "creditedAccountId" })
   creditedAccountId: Accounts;
 
-  @Column()
+  @Column({ type: "float" })
   value: number;
 
   @CreateDateColumn()

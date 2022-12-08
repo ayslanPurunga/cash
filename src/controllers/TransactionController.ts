@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import UserService from "../services/UserService";
 import { TransactionServices } from "../services/TransactionService";
 import { Transactions } from "../entities/Transactions";
-import { UpdateDateColumn } from "typeorm";
 import { AccountServices } from "../services/AccountServices";
 
 export default {
@@ -32,7 +31,7 @@ export default {
     const loggedUser = req.user;
 
     const { username } = req.body;
-    const balance = parseInt(req.body.balance);
+    const balance = parseFloat(req.body.balance);
     const userServices = new UserService();
     const transactionServices = new TransactionServices();
 
@@ -70,7 +69,6 @@ export default {
         });
       }
 
-      console.log({accountCashOut, accountCashIn})
       accountCashOut.balance = accountCashOut.balance - balance;
       accountCashIn.balance = accountCashIn.balance + balance;
 

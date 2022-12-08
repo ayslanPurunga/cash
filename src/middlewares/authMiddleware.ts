@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { UnauthorizedError } from "../helpers/api-errors";
 import { userRepository } from "../repositories/userRepository";
 import jwt from "jsonwebtoken";
-import { userInfo } from "os";
 
 type JwtPayload = {
   id: number;
@@ -36,6 +35,8 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    return res.status(error.statusCode || 500).json({message: error.message || "Internal server error"})
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Internal server error" });
   }
 };

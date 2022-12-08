@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
-import { Accounts } from "../entities/Accounts";
-import { Users } from "../entities/Users";
 import UserService from "../services/UserService";
-import bcrypt from "bcrypt";
 import { BadRequestError, UnauthorizedError } from "../helpers/api-errors";
 import { AccountServices } from "../services/AccountServices";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 export class UserController {
   async create(req: Request, res: Response) {
@@ -37,14 +34,14 @@ export class UserController {
     const user = await userService.login(username, password);
 
     if (!user) {
-      throw new UnauthorizedError("Username or password incorrect!")
+      throw new UnauthorizedError("Username or password incorrect!");
     }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_PASS ?? "", {
       expiresIn: "1d",
     });
 
-    const { password:_, ...userLogin } = user;
+    const { password: _, ...userLogin } = user;
 
     return res.json({
       user: userLogin,

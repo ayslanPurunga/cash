@@ -1,7 +1,6 @@
 import { Users } from "../entities/Users";
 import { userRepository } from "../repositories/userRepository";
 import bcrypt from "bcrypt";
-import { UnauthorizedError } from "../helpers/api-errors";
 import { Accounts } from "../entities/Accounts";
 
 export default class UserService {
