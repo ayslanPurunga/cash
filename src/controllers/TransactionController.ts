@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import UserService from "../services/UserService";
-import { TransactionServices } from "../services/TransactionService";
+import TransactionServices from "../services/TransactionService";
 import { Transactions } from "../entities/Transactions";
-import { AccountServices } from "../services/AccountServices";
+import AccountServices from "../services/AccountServices";
+import { BadRequestError, ForbiddenError } from "../helpers/api-errors";
 
-export default {
+export default class TransactionController {
   async findAll(req: Request, res: Response) {
     const loggedUser = req.user;
     let type: string;
@@ -23,9 +24,9 @@ export default {
       );
       res.status(200).send(transactions);
     } catch (error) {
-      return res.status(400).send(error);
+      throw new BadRequestError(error);
     }
-  },
+  }
 
   async createCashOutTransaction(req: Request, res: Response) {
     const loggedUser = req.user;
@@ -40,33 +41,24 @@ export default {
       const userCashIn = await userServices.findOneByUsername(username);
 
       if (!userCashOut) {
-        return res.status(403).send({
-          errCode: 0,
-          error: "User not found with username.",
-        });
+        throw new ForbiddenError("User not found with username.");
       }
 
       if (!userCashIn) {
-        return res.status(403).send({
-          errCode: 0,
-          error: "User not found with username.",
-        });
+        throw new ForbiddenError("User not found with username.");
       }
 
       if (loggedUser.id === userCashIn.id) {
-        return res.status(403).send({
-          error: "A user cannot do transactions with himself.",
-        });
+        throw new ForbiddenError("A user cannot do transactions with himself.");
       }
 
       const accountCashOut = userCashOut.account;
       const accountCashIn = userCashIn.account;
 
       if (accountCashOut.balance - balance < 0) {
-        return res.status(403).send({
-          errCode: 1,
-          error: "User does not have enough balance for this operation.",
-        });
+        throw new ForbiddenError(
+          "User does not have enough balance for this operation."
+        );
       }
 
       accountCashOut.balance = accountCashOut.balance - balance;
@@ -98,7 +90,7 @@ export default {
         },
       });
     } catch (error) {
-      return res.status(400).send(error);
+      throw new BadRequestError(error);
     }
-  },
-};
+  }
+}

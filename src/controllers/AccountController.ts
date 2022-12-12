@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { BadRequestError } from "../helpers/api-errors";
 import UserService from "../services/UserService";
 
-export default {
+export default class AccountController {
   async balance(req: Request, res: Response) {
     const loggedUser = req.user;
     const userServices = new UserService();
@@ -11,7 +12,7 @@ export default {
 
       return res.status(200).send(user);
     } catch (error) {
-      return res.status(400).send(error);
+      throw new BadRequestError(error)
     }
-  },
-};
+  }
+}

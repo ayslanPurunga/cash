@@ -1,7 +1,7 @@
 import { Transactions } from "../entities/Transactions";
 import { transactionRepository } from "../repositories/transactionRepository";
 
-export class TransactionServices {
+export default class TransactionServices {
   async findOne(id: number): Promise<Transactions | null> {
     const transaction = await transactionRepository.findOneBy({ id });
     return transaction;

@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import UserService from "../services/UserService";
 import { BadRequestError, UnauthorizedError } from "../helpers/api-errors";
-import { AccountServices } from "../services/AccountServices";
+import AccountServices from "../services/AccountServices";
 import jwt from "jsonwebtoken";
 
-export class UserController {
+export default class UserController {
   async create(req: Request, res: Response) {
     let { username, password } = req.body;
     const userService = new UserService();
     const accountService = new AccountServices();
 
     if (!username || !password) {
-      return res.status(400).send({ error: "username/password are required." });
+      throw new BadRequestError("username/password are required.")
     }
 
     const hasUser = await userService.findOneByUsername(username);

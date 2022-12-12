@@ -2,7 +2,7 @@ import { UpdateResult } from "typeorm";
 import { Accounts } from "../entities/Accounts";
 import { accountRepository } from "../repositories/accountRepository";
 
-export class AccountServices {
+export default class AccountServices {
   async create(balance: number): Promise<Accounts> {
     const newAccount = await accountRepository.save({ balance });
     return newAccount;
